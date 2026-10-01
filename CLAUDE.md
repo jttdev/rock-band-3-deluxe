@@ -1,6 +1,7 @@
-# Rock Band Drums
+# Rock Band Linux
 
-Linux RPCS3 / Rock Band 3 Deluxe setup for Roland electronic drums.
+Linux RPCS3 / Rock Band 3 Deluxe setup for all instruments and local multiplayer.
+Roland electronic drums are the first hardware target.
 
 - `README.md`: usage and configuration ownership.
 - `docs/setup.md`: installation and verified workstation state.

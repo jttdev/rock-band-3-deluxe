@@ -74,7 +74,7 @@ def main():
         gui.write(output, space_around_delimiters=False)
         writes.append((gui_file, output.getvalue()))
     stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S.%fZ')
-    backup = Path.home()/'.local/state/rock-band-drums/backups'/stamp
+    backup = Path.home()/'.local/state/rock-band-linux/backups'/stamp
     for target, content in writes:
         print(f'{args.action}: {target}')
         if args.dry_run:
