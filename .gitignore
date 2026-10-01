@@ -1,0 +1,12 @@
+__pycache__/
+.venv/
+.env
+*.bak*
+*.pkg
+*.rap
+*.edat
+*.iso
+*.PUP
+*.AppImage
+*.zip
+local/
