@@ -10,8 +10,11 @@ import shutil
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-FILES = ('config.yml', 'custom_configs/config_BLUS30463.yml',
-         'input_configs/BLUS30463/Default.yml')
+FILES = ('config.yml', 'rb3drums.yml', 'custom_configs/config_BLUS30463.yml',
+         'input_configs/global/Default.yml',
+         'input_configs/BLUS30463/Default.yml',
+         'input_configs/BLUS30463/Keyboard Drums.yml')
+TEXT_FILES = ('input_configs/gamecontrollerdb.txt',)
 
 
 def merge(old, new):
@@ -36,7 +39,8 @@ def main():
     if args.action == 'apply' and not args.dry_run:
         for proc in Path('/proc').glob('[0-9]*/comm'):
             try:
-                if proc.read_text().strip().lower() == 'rpcs3':
+                if (proc.read_text().strip().lower() == 'rpcs3'
+                        or proc.with_name('exe').readlink().name.lower() == 'rpcs3'):
                     parser.error('Close RPCS3 before applying settings.')
             except (FileNotFoundError, PermissionError, ProcessLookupError):
                 pass
@@ -54,6 +58,11 @@ def main():
         else:
             data = template if name.startswith('input_configs/') else merge(live, template)
             writes.append((local, yaml.safe_dump(data, sort_keys=False)))
+    for name in TEXT_FILES:
+        tracked = ROOT/'config/rpcs3'/name
+        local = args.config_dir/name
+        source, target = (local, tracked) if args.action == 'capture' else (tracked, local)
+        writes.append((target, source.read_text()))
     gui_template = ROOT/'config/gui.json'
     gui_file = args.config_dir/'GuiConfigs/CurrentSettings.ini'
     gui = configparser.RawConfigParser(strict=False)

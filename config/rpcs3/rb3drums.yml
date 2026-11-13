@@ -1,0 +1,12 @@
+Pulse width ms: 30
+Minimum velocity: 10
+Combo window in milliseconds: 2000
+Stagger cymbal hits: true
+Midi id to note override: 56=Crash,58=FloorTom,255=HihatPedal
+Combo Start: HihatPedal,HihatPedal,HihatPedal,Snare
+Combo Select: HihatPedal,HihatPedal,HihatPedal,SnareRim
+Combo Toggle Hold Kick: HihatPedal,HihatPedal,HihatPedal,Kick
+Midi CC status: 185
+Midi CC control number: 4
+Midi CC threshold: 64
+Midi CC invert threshold: false

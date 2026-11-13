@@ -1,8 +1,8 @@
 # Roland drum commissioning
 
 Target: TD316 / V31. The kit has not been connected or tested on this workstation.
-`aconnect -l` currently shows no Roland MIDI port. No hardware-specific mapping
-is applied until its actual events and port name can be inspected.
+It is an uncommissioned alternative to the connected EFNOTE kit. Inspect its
+actual events and port name before applying hardware-specific mapping.
 
 ## Connection
 
@@ -29,9 +29,9 @@ Navigation Pad option. The existing keyboard-as-drums profile is only a fallback
 not the final navigation profile for MIDI play.
 
 Follow the [MiloHax MIDI guide](https://guides.milohax.org/en/rb3pc/controllers/drums/midi/)
-for note mappings and `rb3drums.yml` options. After validation, add the generated
-MIDI configuration and measured overrides to the tracked configuration explicitly;
-the capture script deliberately does not discover or copy arbitrary new files.
+for note mappings and `rb3drums.yml` options. Review the tracked EFNOTE MIDI port
+and note overrides before using a different kit. Capture records existing tracked
+files; it does not discover arbitrary new configuration files.
 
 ## Acceptance checks with the kit
 

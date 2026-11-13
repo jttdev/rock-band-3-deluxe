@@ -1,31 +1,34 @@
 Player 1 Input:
-  Handler: Keyboard
-  Device: Keyboard
+  Handler: 'Null'
+  Device: ''
+Player 2 Input:
+  Handler: SDL
+  Device: 8Bitdo SN30 Pro 1
   Config:
-    Device Class Type: 2
-    Vendor ID: 4794
-    Product ID: 528
-    Left Stick Left: ""
-    Left Stick Down: ""
-    Left Stick Right: ""
-    Left Stick Up: ""
-    Right Stick Left: ""
-    Right Stick Down: ""
-    Right Stick Right: ""
-    Right Stick Up: ""
-    Square: J
-    Triangle: F
-    Circle: D
-    Cross: K
-    L1: Space
-    R1: ""
-    L2: ""
-    R2: ""
-    L3: ""
-    R3: ""
-    Start: Return
-    Select: Tab
-    PS Button: Backspace
+    Device Class Type: 0
+    Vendor ID: 1356
+    Product ID: 616
+    Left Stick Left: LS X-
+    Left Stick Down: LS Y-
+    Left Stick Right: LS X+
+    Left Stick Up: LS Y+
+    Right Stick Left: RS X-
+    Right Stick Down: RS Y-
+    Right Stick Right: RS X+
+    Right Stick Up: RS Y+
+    Square: West
+    Cross: South
+    Circle: East
+    Triangle: North
+    L1: LB
+    R1: RB
+    L2: LT
+    R2: RT
+    L3: LS
+    R3: RS
+    Start: Start
+    Select: Back
+    PS Button: Guide
     Up: Up
     Down: Down
     Left: Left
