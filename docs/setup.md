@@ -8,8 +8,9 @@ NVIDIA RTX A4500 Laptop GPU. RPCS3 `0.0.43-20133-53d44aa4`, Sony firmware 4.93.
 US Rock Band 3 (`BLUS30463`) is registered from
 `~/Games/Roms/PS3/Rock Band 3 (USA) (En,Fr,De,Es,It)/`.
 Deluxe build `2afbd3e` is installed in RPCS3's virtual HDD and reports APP_VER 01.05.
-Boot from its updated EBOOT and partial Pro Drums play with the EFNOTE kit are
-verified. Sustained play and measured latency calibration remain pending.
+Boot from its updated EBOOT and Pro Drums scoring with the EFNOTE kit are
+verified. The user confirms calibration and a full-song playthrough are complete;
+numeric calibration offsets are not recorded in this repository.
 
 ## Rebuild
 
@@ -103,7 +104,7 @@ successful installation. Deluxe Quickplay displayed **3,754 songs**. All 3,678
 referenced audio/chart paths checked by the external file audit exist (some
 catalogues reference alternate charts). No RBN folders are in the active library.
 A screenshot and the successful boot log are in `installation-logs/` on the
-external drive. A complete song playback test remains unverified.
+external drive. The user confirms a complete song playthrough is successful.
 
 The game-specific shader mode is `Async Recompiler (multi-threaded)`. The shader
 interpreter mode exhibited a black-screen boot and incomplete menus during

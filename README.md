@@ -66,7 +66,7 @@ in RPCS3, or launch with `--input-config "Keyboard Drums"`.
 
 See [setup](docs/setup.md), [EFNOTE commissioning](docs/efnote.md) and
 [projector](docs/projector.md).
-Hardware calibration remains pending; measured pad events and partial Pro Drums
-play do not establish end-to-end latency or sustained reliability. Guitar/bass controllers, microphones,
+The user confirms calibration and a full-song playthrough are complete. Reconnect
+and advanced input checks remain listed in the commissioning notes. Guitar/bass controllers, microphones,
 keys, and simultaneous multiplayer will each need their own hardware checks and
 documented profiles as they are added.

@@ -98,7 +98,7 @@ Copy the helper from this repository to its installed location. The game launche
 starts it with `--parent-pid "$$" --start-code 311`; Linux reports the measured
 XInput Start button as key code 311. It exits if the launcher/emulator exits.
 
-## Remaining verification
+## Verification and calibration
 
 Pad heads, tested rims, cymbal surfaces/edges/bells and pedal CC have been measured.
 The left crash bell/edge tests stayed on note 49; right crash edge tests stayed on
@@ -106,11 +106,13 @@ The left crash bell/edge tests stayed on note 49; right crash edge tests stayed 
 The kit was observed scoring hits in Pro Drums during the DLC song "1901".
 The user confirmed that the SN30 Pro's first Start press opens the drum
 player/profile and joins drums only. The unused microphone "Start / Join" prompt
-is an available slot, not a joined vocals player. Full menu coverage after
-joining, fast rolls, simultaneous hits, reconnect persistence and full-song
-completion still need verification.
-Audio/video latency must be measured using the external display and the M4's
-wired output; no calibration offsets have been measured.
+is an available slot, not a joined vocals player. The user confirms calibration
+and a full-song playthrough are complete. Numeric calibration offsets have not
+been supplied; calibration remains in the local game save outside git.
+
+Full menu coverage after joining, fast rolls, simultaneous hits and reconnect
+persistence still need explicit verification. Recalibrate after changing the
+display or audio route; use the external display and the M4's wired output.
 
 References: [EFNOTE 3/5/7 guide](https://ef-note.com/products/drums/common357/EFNOTE_3_5_7_RG_en04.pdf)
 and [MiloHax MIDI setup](https://guides.milohax.org/en/rb3pc/controllers/drums/midi/).
