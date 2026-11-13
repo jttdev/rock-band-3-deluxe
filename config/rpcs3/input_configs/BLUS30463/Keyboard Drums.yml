@@ -1,0 +1,32 @@
+Player 1 Input:
+  Handler: Keyboard
+  Device: Keyboard
+  Config:
+    Device Class Type: 2
+    Vendor ID: 4794
+    Product ID: 528
+    Left Stick Left: ""
+    Left Stick Down: ""
+    Left Stick Right: ""
+    Left Stick Up: ""
+    Right Stick Left: ""
+    Right Stick Down: ""
+    Right Stick Right: ""
+    Right Stick Up: ""
+    Square: J
+    Triangle: F
+    Circle: D
+    Cross: K
+    L1: Space
+    R1: ""
+    L2: ""
+    R2: ""
+    L3: ""
+    R3: ""
+    Start: Return
+    Select: Tab
+    PS Button: Backspace
+    Up: Up
+    Down: Down
+    Left: Left
+    Right: Right

@@ -50,7 +50,7 @@ the players and the wall, so the band casts no shadows.
 - Audio through a wired analog output, never HDMI audio via the projector, a
   soundbar or Bluetooth.
 - Calibrate audio and video with this display and the final audio route, as
-  required in [Roland commissioning](roland.md). Deluxe can shift calibration
+  required in [EFNOTE commissioning](efnote.md). Deluxe can shift calibration
   live during a song. Calibration moves the note highway only: drum fills,
   overdrive activation and microphone monitoring keep the full latency, which
   is why real display lag matters for drums and vocals.
