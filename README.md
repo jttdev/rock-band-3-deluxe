@@ -44,7 +44,8 @@ after placing the official AppImage at `~/.local/opt/rpcs3/RPCS3.AppImage`.
 | Arrows | Menu navigation |
 | Tab | Select |
 
-See [setup](docs/setup.md) and [Roland commissioning](docs/roland.md).
+See [setup](docs/setup.md), [Roland commissioning](docs/roland.md) and
+[projector](docs/projector.md).
 Hardware calibration remains pending; the keyboard test does not validate MIDI
 latency or electronic drum playability. Guitar/bass controllers, microphones,
 keys, and simultaneous multiplayer will each need their own hardware checks and
