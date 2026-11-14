@@ -10,6 +10,9 @@
 #include textures/dx_track_texture_funcs.dta
 #include textures/dx_track_texture_handles.dta
 #include track/dx_track_funcs.dta
+#ifdef DX_SPLIT_DRUM_LANES
+#include lanes/dx_drum_lane_runtime.dta
+#endif
 #include track_ui/dx_track_ui_funcs.dta
 #include track_ui/dx_track_streak_funcs.dta
 #include track_ui/dx_track_overdrive_ui_funcs.dta

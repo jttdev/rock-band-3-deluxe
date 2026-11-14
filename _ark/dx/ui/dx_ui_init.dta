@@ -1,3 +1,8 @@
+#ifdef DX_SPLIT_DRUM_LANES
+{set $dx_lane_startup_log {array 0}}
+{set $dx_lane_last_screen ""}
+{dx_drum_lane_trace ui_init_enter}
+#endif
 {set $dx_song_update_hash_old "nothing"}
 #include ../dx_song_update_hash.dta
 #include dx_hyper_finder.dta
@@ -19,6 +24,13 @@
 {set $dx_controller_type_list (kControllerDrum kControllerGuitar kControllerVocals kControllerKeys kControllerRealGuitar)}
 
 {set $dx_nav_controller_port -1}
+
+#ifdef DX_SPLIT_DRUM_LANES
+{set $dx_drum_lane_parts (snare high_tom middle_tom floor_tom hihat ride crash)}
+{set $dx_drum_kit_order (hihat snare high_tom middle_tom ride floor_tom crash)}
+{set $dx_drum_lane_order {array (hihat snare high_tom middle_tom ride floor_tom crash)}}
+{set $dx_drum_lane_layout 0}
+#endif
 
 {set $dx_window_offset 0}
 
@@ -874,11 +886,20 @@ DX_CURRENT_SONG_CLEAR
    none
 )}
 
+#ifdef DX_SPLIT_DRUM_LANES
+{dx_drum_lane_trace settings_read_begin}
+#endif
 {if {file_exists DX_SETTINGS_FILE_PATH}
    {if {> {size {read_file DX_SETTINGS_FILE_PATH}} 0}
       {dx_settings_dta_reader}
    }
 }
+
+#ifdef DX_SPLIT_DRUM_LANES
+{dx_drum_lane_trace settings_read_end}
+{dx_drum_lane_validate}
+{dx_drum_lane_trace lane_validation_end}
+#endif
 
 #ifdef _SHIP
 {if {file_exists DX_MODIFIER_FILE_PATH} {dx_modifier_dta_reader}}
@@ -1131,4 +1152,8 @@ DX_CURRENT_SONG_CLEAR
 #endif
 #ifdef HX_WII
 {set $debug_mode 1}
+#endif
+#ifdef DX_SPLIT_DRUM_LANES
+{dx_drum_lane_trace ui_init_end}
+{script_task kTaskUISeconds (delay 10) (script {dx_drum_lane_watch})}
 #endif

@@ -650,6 +650,9 @@
 }
 {func dx_handle_nav_pad
    ($action)
+   #ifdef DX_SPLIT_DRUM_LANES
+   {dx_drum_lane_trace {sprint "nav_" $action "_leader_" {session_mgr has_leader_user} "_transition_" {ui in_transition}}}
+   #endif
    {if {&& {session_mgr has_leader_user} {! {ui in_transition}}}
       {do
          ($leader {dx_get_local_leader})

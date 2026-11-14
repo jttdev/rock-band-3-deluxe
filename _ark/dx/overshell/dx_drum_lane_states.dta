@@ -1,0 +1,54 @@
+(dxState_DrumLanes
+   (view
+      {sprint {if_else {== $dx_drum_lane_layout 0} "> " "  "} {localize dx_drum_layout_standard}}
+      {sprint {if_else {== $dx_drum_lane_layout 1} "> " "  "} {localize dx_drum_layout_kit}}
+      {sprint {if_else {== $dx_drum_lane_layout 2} "> " "  "} {localize dx_drum_layout_custom}}
+      {localize dx_drum_layout_edit}
+   )
+   (message dx_drum_layout_desc)
+   (enter
+      {dx_drum_lane_validate}
+      {if {session is_in_game} {dx_state dxState_DeluxeSettings}}
+   )
+   (button
+      (kAction_Confirm
+         {unless {session is_in_game}
+            {switch {$current_list selected_data}
+               (0 {set $dx_drum_lane_layout 0})
+               (1 {set $dx_drum_lane_layout 1})
+               (2 {set $dx_drum_lane_layout 2})
+               (3
+                  {set $dx_drum_lane_layout 2}
+                  {dx_state dxState_DrumLaneOrder}
+               )
+            }
+         }
+      )
+      (kAction_Cancel {dx_state dxState_DeluxeSettings})
+   )
+)
+
+(dxState_DrumLaneOrder
+   (view
+      {dx_drum_lane_row hihat}
+      {dx_drum_lane_row snare}
+      {dx_drum_lane_row high_tom}
+      {dx_drum_lane_row middle_tom}
+      {dx_drum_lane_row ride}
+      {dx_drum_lane_row floor_tom}
+      {dx_drum_lane_row crash}
+   )
+   (message dx_drum_layout_order_desc)
+   (button
+      (kAction_Left
+         {dx_drum_lane_move {elem $dx_drum_kit_order {$current_list selected_data}} -1}
+      )
+      (kAction_Right
+         {dx_drum_lane_move {elem $dx_drum_kit_order {$current_list selected_data}} 1}
+      )
+      (kAction_Confirm
+         {dx_drum_lane_move {elem $dx_drum_kit_order {$current_list selected_data}} 1}
+      )
+      (kAction_Cancel {dx_state dxState_DrumLanes})
+   )
+)

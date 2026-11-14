@@ -19,6 +19,10 @@ parser.add_argument("--ci", action="store_true", help="used by CI")
 
 args = parser.parse_args()
 
+split_drum_lanes = bool(args.define and "DX_SPLIT_DRUM_LANES" in args.define)
+if split_drum_lanes and (args.platform != "ps3" or sys.platform != "linux"):
+    parser.error("DX_SPLIT_DRUM_LANES currently targets PS3 assets on Linux")
+
 def print_color_text(*args):
     text = " ".join(map(str, args[:-1]))
     color_code = args[-1]
@@ -151,6 +155,18 @@ ninja.rule(
 ninja.rule("dtacheck", "$dtacheck $in .dtacheckfns", description="DTACHECK $in")
 ninja.rule("dtab_serialize", "$dtab -b $in $out", description="DTAB SER $in")
 ninja.rule("dtab_encrypt", "$dtab -e $in $out", description="DTAB ENC $in")
+if split_drum_lanes:
+    lane_tool = "tools/MiloTool/bin/Release/net10.0/MiloTool.dll"
+    ninja.rule("lane_tool", "python3 tools/bootstrap.py", description="BUILD Milo lane tools")
+    ninja.build(lane_tool, "lane_tool", implicit=[
+        "tools/bootstrap.py", "global.json", "tools/MiloTool/MiloTool.csproj",
+        "third_party/MiloLib/MiloLib/MiloLib.csproj",
+        *[str(path) for path in Path("tools/MiloTool").glob("*.cs")],
+        *[str(path) for path in Path("third_party/MiloLib/MiloLib").rglob("*.cs")
+          if "obj" not in path.parts and "bin" not in path.parts],
+    ])
+    ninja.rule("drum_lanes", "python3 tools/lane_assets.py $in _ark/ui/track/gen/tracksystem_meshes.milo_ps3 $out",
+               description="BUILD separate drum lane assets")
 ninja.build("_always", "phony")
 
 build_files = []
@@ -394,7 +410,15 @@ for f in filter(ark_file_filter, Path("_ark").rglob("*")):
             index = f.parts.index("_ark")
             out_path = Path("obj", args.platform, "ark").joinpath(*f.parts[index + 1 :])
             if not out_path.name.endswith("_update.txt"):
-                ninja.build(str(out_path), "copy", str(f))
+                if split_drum_lanes and f.as_posix() in (
+                    "_ark/ui/track/gen/tracksystem.milo_ps3", "_ark/ui/track/gen/trackpanel.milo_ps3"
+                ):
+                    ninja.build(str(out_path), "drum_lanes", str(f), implicit=[
+                        lane_tool, "tools/lane_assets.py", "tools/bootstrap.py",
+                        "_ark/ui/track/gen/tracksystem_meshes.milo_ps3",
+                    ])
+                else:
+                    ninja.build(str(out_path), "copy", str(f))
                 ark_files.append(str(out_path))
 
 if args.platform in ("ps3", "xbox"):

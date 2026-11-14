@@ -1,0 +1,96 @@
+{func dx_drum_lane_trace ($stage)
+   #ifdef DX_SPLIT_DRUM_LANES
+   {do
+      ($year 0) ($month 0) ($day 0) ($hour 0) ($minute 0) ($second 0)
+      {get_date_time $year $month $day $hour $minute $second}
+      {push_back $dx_lane_startup_log {array ($stage $hour $minute $second)}}
+      {write_file {sprint DX_GAMEDATA_ROOT "dx_lane_startup.dta"} $dx_lane_startup_log}
+   }
+   #endif
+}
+
+{func dx_drum_lane_validate
+   {do
+      ($valid FALSE)
+      {if {== {type $dx_drum_lane_order} kDataArray}
+         {if {== {size $dx_drum_lane_order} 7}
+            {set $valid TRUE}
+            {foreach $part $dx_drum_lane_parts
+               {unless {contains $dx_drum_lane_order $part}
+                  {set $valid FALSE}
+               }
+            }
+         }
+      }
+      {unless $valid
+         {set $dx_drum_lane_order {array (hihat snare high_tom middle_tom ride floor_tom crash)}}
+      }
+      {if_else {== {type $dx_drum_lane_layout} {type 0}}
+         {unless {&& {>= $dx_drum_lane_layout 0} {<= $dx_drum_lane_layout 2}}
+            {set $dx_drum_lane_layout 0}
+         }
+         {set $dx_drum_lane_layout 0}
+      }
+   }
+}
+
+{func dx_drum_lane_watch
+   #ifdef DX_SPLIT_DRUM_LANES
+   {do
+      ($screen {sprint {ui current_screen}})
+      {unless {== $dx_lane_last_screen $screen}
+         {set $dx_lane_last_screen $screen}
+         {dx_drum_lane_trace {sprint "screen_" $screen}}
+      }
+   }
+   {script_task kTaskUISeconds (delay 0.5) (script {dx_drum_lane_watch})}
+   #endif
+}
+
+{func dx_drum_lane_position ($part)
+   {do
+      ($position -1)
+      {find_elem
+         {if_else {== $dx_drum_lane_layout 1} $dx_drum_kit_order $dx_drum_lane_order}
+         $part
+         $position
+      }
+      $position
+   }
+}
+
+{func dx_drum_lane_row ($part)
+   {sprint {localize {sprint "dx_drum_part_" $part}} ": " {+ 1 {dx_drum_lane_position $part}}}
+}
+
+{func dx_drum_lane_move ($part $direction)
+   {unless {session is_in_game}
+      {dx_drum_lane_validate}
+      {set $dx_drum_lane_layout 2}
+      {do
+         ($position {dx_drum_lane_position $part})
+         ($target {+ $position $direction})
+         {if {&& {>= $target 0} {< $target 7}}
+            {set_elem $dx_drum_lane_order $position {elem $dx_drum_lane_order $target}}
+            {set_elem $dx_drum_lane_order $target $part}
+         }
+      }
+   }
+}
+
+{func dx_drum_lane_widget ($slot $cymbal $widget)
+   #ifdef DX_SPLIT_DRUM_LANES
+   {if_else {!= $dx_drum_lane_layout 0}
+      {do
+         ($part {elem (none snare high_tom middle_tom floor_tom) $slot})
+         {if {&& $cymbal {> $slot 1}}
+            {set $part {elem (none snare hihat ride crash) $slot}}
+         }
+         {symbol {sprint "dx_lane_" $part "_" $widget}}
+      }
+      $widget
+   }
+   #else
+   $widget
+   #endif
+}

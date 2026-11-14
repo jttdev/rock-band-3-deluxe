@@ -5,9 +5,24 @@ using MiloLib;
 using MiloLib.Assets;
 using MiloLib.Assets.Rnd;
 
+if (args.Length == 4 && args[0] == "prepare-lanes")
+{
+    try
+    {
+        LaneAssets.Prepare(args[1], args[2], args[3]);
+        return 0;
+    }
+    catch (Exception error)
+    {
+        Console.Error.WriteLine(error.ToString());
+        return 1;
+    }
+}
+
 if (args.Length != 3 || args[0] != "inspect")
 {
     Console.Error.WriteLine("Usage: MiloTool inspect INPUT.milo_ps3 OUTPUT.json");
+    Console.Error.WriteLine("       MiloTool prepare-lanes TRACK.milo_ps3 MESHES.milo_ps3 OUTPUT.json");
     return 2;
 }
 
@@ -51,12 +66,27 @@ try
                 widgetType = widget.widgetType.ToString(),
             } : null,
             transform = TransformOf(entry.obj),
+            group = entry.obj is RndGroup group ? new
+            {
+                objects = group.objects.Select(value => value.value).ToArray(),
+                drawOnly = group.drawOnly.value,
+            } : null,
+            material = entry.obj is RndMat mat ? new
+            {
+                color = new[] { mat.color.r, mat.color.g, mat.color.b, mat.color.a },
+                blend = mat.blend.ToString(), diffuse = mat.diffuseTex.value,
+            } : null,
             mesh = entry.obj is RndMesh mesh ? new
             {
                 geometryOwner = mesh.geomOwner.value,
                 vertices = mesh.vertices.vertices.Count,
                 minX = mesh.vertices.vertices.Count == 0 ? 0 : mesh.vertices.vertices.Min(vertex => vertex.x),
                 maxX = mesh.vertices.vertices.Count == 0 ? 0 : mesh.vertices.vertices.Max(vertex => vertex.x),
+                minY = mesh.vertices.vertices.Count == 0 ? 0 : mesh.vertices.vertices.Min(vertex => vertex.y),
+                maxY = mesh.vertices.vertices.Count == 0 ? 0 : mesh.vertices.vertices.Max(vertex => vertex.y),
+                minZ = mesh.vertices.vertices.Count == 0 ? 0 : mesh.vertices.vertices.Min(vertex => vertex.z),
+                maxZ = mesh.vertices.vertices.Count == 0 ? 0 : mesh.vertices.vertices.Max(vertex => vertex.z),
+                material = mesh.mat.value,
             } : null,
             trigger = entry.obj is EventTrigger trigger ? new
             {

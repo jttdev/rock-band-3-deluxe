@@ -1,0 +1,244 @@
+{func dx_drum_lane_place_widgets ($track $part $smasher $anchor)
+   {do
+      ($base_x 0) ($base_y 0) ($base_z 0)
+      ($target_x 0) ($target_y 0) ($target_z 0)
+      ($prefix {sprint "dx_lane_" $part "_"})
+      {$smasher get_world_pos $base_x $base_y $base_z}
+      {$anchor get_world_pos $target_x $target_y $target_z}
+      {$track iterate TrackWidget $widget
+         {if {startswith {$widget name} $prefix}
+            {if_else
+               {||
+                  {startswith {$widget name} {sprint $prefix "drum_roll"}}
+                  {startswith {$widget name} {sprint $prefix "drum_mash"}}
+                  {startswith {$widget name} {sprint $prefix "dynamic_crash_beard"}}
+               }
+               {{$track find drum_surface_widgets.grp} add_object $widget}
+               {{$track find drum_gems.grp} add_object $widget}
+            }
+            {unless {$widget has (dx_lane_base_offsets)}
+               {$widget set dx_lane_base_offsets {array ({$widget get x_offset} {$widget get y_offset} {$widget get z_offset})}}
+            }
+            {$widget set x_offset {+ {elem {$widget get dx_lane_base_offsets} 0} {- $target_x $base_x}}}
+            {$widget set y_offset {+ {elem {$widget get dx_lane_base_offsets} 1} {- $target_y $base_y}}}
+            {$widget set z_offset {+ {elem {$widget get dx_lane_base_offsets} 2} {- $target_z $base_z}}}
+         }
+      }
+   }
+}
+
+{func dx_drum_lane_anchor ($smasher $plate $name $part)
+   {with $smasher
+      {unless {exists $name} {new Trans $name}}
+      {$name set_trans_parent $plate}
+      {$name set_local_pos
+         {* 2.8 {- {dx_drum_lane_position $part} 3}}
+         {if_else {find_elem (hihat ride crash) $part} -2.55 0}
+         {if_else {find_elem (hihat ride crash) $part} -0.1 0}
+      }
+      {$name set_local_rot {$smasher get_local_rot_index 0} {$smasher get_local_rot_index 1} {$smasher get_local_rot_index 2}}
+      {$name set_local_scale {$smasher get_local_scale_index 0} {$smasher get_local_scale_index 1} {$smasher get_local_scale_index 2}}
+      {object $name}
+   }
+}
+
+{func dx_drum_lane_cymbal_trigger ($trigger $enabled)
+   {do
+      ($index 0)
+      {unless {$trigger has (dx_lane_original_anims)}
+         {$trigger set dx_lane_original_anims {array 0}}
+         {foreach_int $index 0 {$trigger size (anims)}
+            {push_back {$trigger get dx_lane_original_anims} {$trigger get (anims $index anim)}}
+         }
+         {$trigger set dx_lane_original_launchers {$trigger get_array part_launchers}}
+      }
+      {foreach_int $index 0 {$trigger size (anims)}
+         {$trigger set (anims $index anim)
+            {if_else $enabled
+               dx_lane_cymbal_react.tnm
+               {elem {$trigger get dx_lane_original_anims} $index}
+            }
+         }
+      }
+      {foreach_int $index 0 {size {$trigger get dx_lane_original_launchers}}
+         {do
+            ($original {elem {$trigger get dx_lane_original_launchers} $index})
+            ($name {symbol {sprint "dx_lane_cym_" {$original name}}})
+            {if_else $enabled
+               {do
+                  {unless {exists $name} {new PartLauncher $name}}
+                  {$name copy $original kCopyShallow}
+                  {$name set trans dx_lane_cymbal_anchor.trans}
+                  {$trigger set (part_launchers $index) {object $name}}
+               }
+               {$trigger set (part_launchers $index) $original}
+            }
+         }
+      }
+   }
+}
+
+{func dx_drum_lane_receiver ($track $plate $smasher $slot $enabled)
+   {dx_drum_lane_trace {sprint "receiver_" $slot "_begin"}}
+   {with $smasher
+      {unless {gem_smasher.grp has (dx_lane_original_parent)}
+         {gem_smasher.grp set dx_lane_original_parent {gem_smasher.grp trans_parent}}
+         {gem_smasher.grp set dx_lane_original_position {array ({gem_smasher.grp get_local_pos_index 0} {gem_smasher.grp get_local_pos_index 1} {gem_smasher.grp get_local_pos_index 2})}}
+         {gem_smasher.grp set dx_lane_original_scale {array ({gem_smasher.grp get_local_scale_index 0} {gem_smasher.grp get_local_scale_index 1} {gem_smasher.grp get_local_scale_index 2})}}
+      }
+      {dx_drum_lane_trace {sprint "receiver_" $slot "_original_saved"}}
+      {if_else $enabled
+         {do
+            ($part {elem (none snare high_tom middle_tom floor_tom) $slot})
+            ($anchor {dx_drum_lane_anchor $smasher $plate dx_lane_pad_anchor.trans $part})
+            {gem_smasher.grp set_trans_parent $anchor}
+            {gem_smasher.grp set_local_pos 0 0 0}
+            {gem_smasher.grp set_local_scale
+               {* 0.5 {elem {gem_smasher.grp get dx_lane_original_scale} 0}}
+               {elem {gem_smasher.grp get dx_lane_original_scale} 1}
+               {elem {gem_smasher.grp get dx_lane_original_scale} 2}
+            }
+            {dx_drum_lane_place_widgets $track $part $smasher $anchor}
+         }
+         {do
+            {gem_smasher.grp set_trans_parent {gem_smasher.grp get dx_lane_original_parent}}
+            {gem_smasher.grp set_local_pos
+               {elem {gem_smasher.grp get dx_lane_original_position} 0}
+               {elem {gem_smasher.grp get dx_lane_original_position} 1}
+               {elem {gem_smasher.grp get dx_lane_original_position} 2}
+            }
+            {gem_smasher.grp set_local_scale
+               {elem {gem_smasher.grp get dx_lane_original_scale} 0}
+               {elem {gem_smasher.grp get dx_lane_original_scale} 1}
+               {elem {gem_smasher.grp get dx_lane_original_scale} 2}
+            }
+         }
+      }
+      {dx_drum_lane_trace {sprint "receiver_" $slot "_pad_placed"}}
+      {$smasher iterate PartLauncher $launcher
+         {unless {startswith {$launcher name} "dx_lane_cym_"}
+            {unless {$launcher has (dx_lane_original_trans)}
+               {$launcher set dx_lane_original_trans {$launcher get trans}}
+            }
+            {$launcher set trans
+               {if_else $enabled dx_lane_pad_anchor.trans {$launcher get dx_lane_original_trans}}
+            }
+         }
+      }
+      {dx_drum_lane_trace {sprint "receiver_" $slot "_launchers_placed"}}
+      {if {> $slot 1}
+         {if $enabled
+            {do
+               ($part {elem (none none hihat ride crash) $slot})
+               ($anchor {dx_drum_lane_anchor $smasher $plate dx_lane_cymbal_anchor.trans $part})
+               ($color {elem (red yellow blue green style) {eval {var {sprint "dx_drum_cymbal_color" $slot}}}})
+               ($source {$track find {sprint "dx_lane_cymbal_gem_" $color ".mesh"}})
+               {dx_drum_lane_trace {sprint "receiver_" $slot "_cymbal_anchor_ready"}}
+               {unless {exists dx_lane_cymbal_react.trans}
+                  {new Trans dx_lane_cymbal_react.trans}
+                  {dx_lane_cymbal_react.trans set_trans_parent $anchor}
+                  {dx_drum_lane_trace cymbal_react_transform_created}
+                  {new TransAnim dx_lane_cymbal_react.tnm}
+                  {dx_drum_lane_trace cymbal_react_animation_created}
+                  {dx_lane_cymbal_react.tnm copy smasher_react.tnm kCopyShallow}
+                  {dx_drum_lane_trace cymbal_react_animation_copied}
+                  {dx_lane_cymbal_react.tnm set_trans dx_lane_cymbal_react.trans}
+                  {dx_drum_lane_trace cymbal_react_animation_targeted}
+                  {new Mesh dx_lane_cymbal.mesh}
+                  {new Mat dx_lane_cymbal_receiver.mat}
+                  {new Group dx_lane_cymbal_draw.grp}
+                  {dx_lane_cymbal_draw.grp set_trans_parent dx_lane_cymbal_react.trans}
+                  {dx_lane_cymbal_draw.grp set environ {$track find track_gems.env}}
+                  {dx_lane_cymbal_draw.grp add_object dx_lane_cymbal.mesh}
+                  {base_top.grp add_object dx_lane_cymbal_draw.grp}
+                  {dx_drum_lane_trace cymbal_mesh_created}
+               }
+               {if_else $source
+                  {do
+                     {dx_lane_cymbal.mesh set geom_owner $source}
+                     {dx_lane_cymbal_receiver.mat copy {$source get mat} kCopyShallow}
+                     {dx_lane_cymbal_receiver.mat set alpha 0.45}
+                     {dx_lane_cymbal_receiver.mat set blend kBlendSrcAlpha}
+                     {dx_lane_cymbal_receiver.mat set alpha_cut TRUE}
+                     {dx_lane_cymbal_receiver.mat set alpha_threshold 1}
+                     {dx_lane_cymbal.mesh set mat dx_lane_cymbal_receiver.mat}
+                  }
+                  {dx_drum_lane_trace cymbal_receiver_source_missing}
+               }
+               {dx_lane_cymbal.mesh set_trans_parent dx_lane_cymbal_react.trans}
+               {dx_lane_cymbal.mesh set_local_pos 0 0 0}
+               {dx_lane_cymbal.mesh set_local_rot 0 0 0}
+               {dx_lane_cymbal.mesh set_local_scale 1 1 1}
+               {dx_drum_lane_place_widgets $track $part $smasher $anchor}
+            }
+         }
+         {if {exists dx_lane_cymbal.mesh} {dx_lane_cymbal.mesh set_showing $enabled}}
+         {dx_drum_lane_cymbal_trigger {object hit_cymbals.trig} $enabled}
+         {dx_drum_lane_cymbal_trigger {object hit_cymbals_bonus.trig} $enabled}
+      }
+   }
+   {dx_drum_lane_trace {sprint "receiver_" $slot "_end"}}
+}
+
+{func dx_drum_lane_guides ($track $enabled)
+   {with $track
+      {foreach $name (drum_slots_narrow.mesh drum_slots_new.mesh)
+         {if {exists $name}
+            {unless {$name has (dx_lane_original_showing)}
+               {$name set dx_lane_original_showing {$name get showing}}
+            }
+            {$name set_showing {&& {! $enabled} {$name get dx_lane_original_showing}}}
+         }
+      }
+      {foreach_int $index 0 6
+         {do
+            ($name {symbol {sprint "dx_lane_guide_" $index ".mesh"}})
+            {if {&& $enabled {! {exists $name}}}
+               {unless {exists dx_lane_guides.mat}
+                  {new Mat dx_lane_guides.mat}
+                  {dx_lane_guides.mat set color {pack_color 0.6 0.6 0.6}}
+                  {dx_lane_guides.mat set alpha 0.35}
+                  {dx_lane_guides.mat set blend kBlendSrcAlpha}
+               }
+               {new Mesh $name}
+               {dx_generate_quad_mesh $name 0.035 350}
+               {$name set mat dx_lane_guides.mat}
+               {$name set_trans_parent drum_draw.grp}
+               {$name set_local_rot -90 0 0}
+               {$name set_local_pos {* 2.8 {- $index 2.5}} 175 0.02}
+               {drum_draw.grp add_object $name}
+            }
+            {if {exists $name} {$name set_showing $enabled}}
+         }
+      }
+   }
+}
+
+{func dx_apply_drum_lanes
+   {dx_drum_lane_trace track_lanes_begin}
+   {dx_drum_lane_validate}
+   {dx_drum_lane_trace track_lanes_validated}
+   {beatmatch foreach_active_player $player
+      {if {|| {== {$player instrument} drum} {== {$player instrument} real_drum}}
+         {do
+            ($track 0)
+            ($plate 0)
+            ($enabled {!= $dx_drum_lane_layout 0})
+            {dx_drum_lane_trace drum_player_found}
+            {set $track {find_obj DX_GEMTRACKDIR}}
+            {dx_drum_lane_trace drum_track_found}
+            {set $plate {$track get smasher_plate}}
+            {dx_drum_lane_trace drum_plate_found}
+            {if {|| $enabled {$track has (dx_lane_initialized)}}
+               {foreach_int $slot 1 5
+                  {dx_drum_lane_trace {sprint "smasher_" $slot "_lookup"}}
+                  {dx_drum_lane_receiver $track $plate {$plate find {sprint "gem_smasher" $slot}} $slot $enabled}
+               }
+               {dx_drum_lane_guides $track $enabled}
+               {$track set dx_lane_initialized TRUE}
+            }
+         }
+      }
+   }
+   {dx_drum_lane_trace track_lanes_end}
+}
