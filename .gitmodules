@@ -1,3 +1,9 @@
 [submodule "rb3dx_assets"]
 	path = rb3dx_assets
 	url = https://github.com/LinosM/rb3dx_assets
+[submodule "third_party/rb3-engine-reference"]
+	path = third_party/rb3-engine-reference
+	url = https://github.com/DarkRTA/rb3.git
+[submodule "third_party/MiloLib"]
+	path = third_party/MiloLib
+	url = https://github.com/ihatecompvir/MiloLib.git

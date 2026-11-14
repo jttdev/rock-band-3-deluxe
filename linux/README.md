@@ -1,5 +1,9 @@
 # Rock Band Linux
 
+This directory is the Linux workstation portion of the combined Rock Band 3
+development checkout. Run the commands below from `linux/`; the paths are relative
+to this directory. The source and development tools live at the repository root.
+
 Reproducible Linux setup for the full Rock Band 3 Deluxe experience: drums,
 guitar, bass, vocals, keys, and local multiplayer through RPCS3.
 The connected electronic kit is reported as an EFNOTE 3B, using a CME C2MIDI Pro
