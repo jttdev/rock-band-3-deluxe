@@ -135,8 +135,9 @@ profile defaults to EFNOTE; its prior custom order is preserved. Alignment
 acceptance uses the local receiver surface and note/target contact, not equal
 screen bottom-edge heights. Final visual acceptance remains with the user.
 Multiplayer still needs focused verification. The workstation uses the local
-PS3 build from `feature/separate-cymbal-lanes` in the owned
-`jttdev/rock-band-3-deluxe` fork.
+PS3 build from the owned `jttdev/rock-band-3-deluxe` fork.
+The installed source commit and file hashes are recorded in its local backup
+manifest.
 
 ### Test profile
 

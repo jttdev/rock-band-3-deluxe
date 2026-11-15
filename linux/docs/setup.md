@@ -8,7 +8,8 @@ NVIDIA RTX A4500 Laptop GPU. RPCS3 `0.0.43-20133-53d44aa4`, Sony firmware 4.93.
 US Rock Band 3 (`BLUS30463`) is registered from
 `~/Games/Roms/PS3/Rock Band 3 (USA) (En,Fr,De,Es,It)/`.
 The workstation uses the local PS3 build from the owned
-`jttdev/rock-band-3-deluxe` fork, branch `feature/separate-cymbal-lanes`.
+`jttdev/rock-band-3-deluxe` fork. The local backup manifest records the
+installed source commit and file hashes.
 See [drum lanes](../../docs/drum-lanes.md) for build and runtime verification.
 Calibration and saves are preserved from the commissioned installation; numeric
 calibration offsets are not recorded in this repository.
