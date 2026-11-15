@@ -1,4 +1,5 @@
 #include dx_mesh_funcs.dta
+#include ../track/lanes/dx_drum_lane_funcs.dta
 #include dx_search_funcs.dta
 #include dx_fix_special_chars.dta
 {set $dx_metamusic_list (

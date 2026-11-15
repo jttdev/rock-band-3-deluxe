@@ -1,0 +1,4 @@
+#!/bin/sh
+export APPIMAGELAUNCHER_DISABLE=1
+export QT_QPA_PLATFORM=xcb
+exec "$HOME/.local/opt/rpcs3/RPCS3.AppImage" "$@"

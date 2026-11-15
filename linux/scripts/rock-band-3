@@ -1,0 +1,22 @@
+#!/bin/sh
+# Rock Band 3 Deluxe uses the external drive for installed songs.
+game="$HOME/Games/Roms/PS3/Rock Band 3 (USA) (En,Fr,De,Es,It)"
+installed="$HOME/.config/rpcs3/dev_hdd0/game/BLUS30463/USRDIR/EBOOT.BIN"
+if [ ! -f "$installed" ]; then
+    message="Connect and unlock EXT_MICRON before starting Rock Band 3 Deluxe."
+    if command -v kdialog >/dev/null 2>&1; then
+        kdialog --error "$message"
+    else
+        printf '%s\n' "$message" >&2
+    fi
+    exit 1
+fi
+# Keep the gamepad path stable when USB event devices are renumbered.
+export SDL_JOYSTICK_LINUX_CLASSIC=1
+bridge_python="$HOME/.local/share/rock-band-linux/controller-venv/bin/python"
+bridge_script="$HOME/.local/share/rock-band-linux/sn30-drum-start.py"
+if [ -x "$bridge_python" ] && [ -f "$bridge_script" ]; then
+    mkdir -p "$HOME/.local/state/rock-band-linux"
+    "$bridge_python" "$bridge_script" --parent-pid "$$" --start-code 311 > "$HOME/.local/state/rock-band-linux/controller-start.log" 2>&1 &
+fi
+exec "$HOME/.local/bin/rpcs3" --no-gui "$game"

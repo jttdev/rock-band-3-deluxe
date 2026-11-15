@@ -6,6 +6,9 @@
          }
          os_venue_options
          os_track_theme
+         #ifdef DX_SPLIT_DRUM_LANES
+         {if_else {session is_in_game} 0 os_drum_lane_layouts}
+         #endif
          os_features
          os_advanced
          {if_else {! {session is_in_game}} ;prevents soft-lock, swapping instrument type in-game would prevent player from rejoining
@@ -22,6 +25,9 @@
          )
          (os_venue_options {dx_state dxState_VenueOptions})
          (os_track_theme {dx_state #ifdef HX_WII dxState_TextureMenu #else dxState_TrackThemeLoader #endif})
+         #ifdef DX_SPLIT_DRUM_LANES
+         (os_drum_lane_layouts {dx_state dxState_DrumLanes})
+         #endif
          (os_features {dx_state dxState_InGameFeatures})
          (os_advanced {dx_state dxState_Advanced})
          (os_controller {dx_state dxState_ControllerMenu})

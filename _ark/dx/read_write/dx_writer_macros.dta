@@ -230,6 +230,10 @@
    {dx_setting_saver dx_settings dx_synth_enabled $dx_synth_enabled}
    {dx_setting_saver dx_settings dx_selected_synth $dx_selected_synth}
    {dx_setting_saver dx_settings dx_nav_controller_port $dx_nav_controller_port}
+   #ifdef DX_SPLIT_DRUM_LANES
+   {dx_setting_saver dx_settings dx_drum_lane_layout $dx_drum_lane_layout}
+   {dx_setting_saver dx_settings dx_drum_lane_order $dx_drum_lane_order}
+   #endif
    #ifndef HX_WII
    {dx_setting_saver dx_settings platform_audio_latency {profile_mgr get_platform_audio_latency}}
    {dx_setting_saver dx_settings platform_video_latency {profile_mgr get_platform_video_latency}}

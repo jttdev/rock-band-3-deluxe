@@ -5,6 +5,12 @@
 *.ninja
 .ninja_log
 
+# Local development outputs
+tools/**/bin/
+tools/**/obj/
+tools/**/__pycache__/
+.cache/
+
 #input for wii files for build
 platform/wii
 

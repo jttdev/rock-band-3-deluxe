@@ -118,8 +118,14 @@
       {dx_track_angle_var_reset} ;reset the track angle just to be safe
       {unless $dx_texloadonce {dx_default_texture_var_reset}} ;reset rb3 textures if no textures have been loaded yet
       {dx_reset_track_meshes} ;unhide track meshes just incase user quit last song mid-countdown
+      #ifdef DX_SPLIT_DRUM_LANES
+      {dx_apply_drum_lanes}
+      #endif
    )
    (dx_track_panel_on_extend
+      #ifdef DX_SPLIT_DRUM_LANES
+      {dx_apply_drum_lanes}
+      #endif
       {if {! {gamemode in_mode trainer}}
          {dx_lyric_display_start}
          {if {exists beatmatch}

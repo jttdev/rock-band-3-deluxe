@@ -1,0 +1,13 @@
+Video:
+  Renderer: Vulkan
+  Resolution: 1280x720
+  Frame limit: Auto
+Audio:
+  Renderer: Cubeb
+  Audio Format: Stereo
+  Enable Buffering: true
+  Desired Audio Buffer Duration: 34
+  Enable Time Stretching: false
+Miscellaneous:
+  Start games in fullscreen mode: true
+  Pause emulation on RPCS3 focus loss: false

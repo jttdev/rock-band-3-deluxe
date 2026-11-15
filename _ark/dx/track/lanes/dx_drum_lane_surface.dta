@@ -1,0 +1,91 @@
+; Samples are (x z dz/dx) in gem_smashers.grp coordinates. Stock receivers
+; rotate only around Y; the engine's row-vector X axis has slope -tan(Y).
+{func dx_drum_lane_surface_capture ($plate)
+   {unless {$plate has (dx_lane_surface_samples)}
+      {$plate set dx_lane_surface_samples {array 0}}
+      {foreach_int $slot 1 5
+         {do
+            ($receiver {$plate find {sprint "gem_smasher" $slot}})
+            {push_back {$plate get dx_lane_surface_samples}
+               {array
+                  ({$receiver get_local_pos_index 0}
+                   {$receiver get_local_pos_index 2}
+                   {- 0 {tan {$receiver get_local_rot_index 1}}})
+               }
+            }
+         }
+      }
+   }
+}
+
+; Reordering changes only X. Preserve the asset's chart-time and geometry offsets.
+{func dx_drum_lane_widget_offsets ($original $lateral_shift)
+   {array ({+ {elem $original 0} $lateral_shift} {elem $original 1} {elem $original 2})}
+}
+
+; Return height and tangent slope. Extend the end tangents outside the stock span.
+{func dx_drum_lane_surface_eval ($samples $x)
+   {do
+      ($left {elem $samples 0})
+      ($right {elem $samples 3})
+      {if_else {<= $x {elem $left 0}}
+         {array ({+ {elem $left 1} {* {- $x {elem $left 0}} {elem $left 2}}} {elem $left 2})}
+         {if_else {>= $x {elem $right 0}}
+            {array ({+ {elem $right 1} {* {- $x {elem $right 0}} {elem $right 2}}} {elem $right 2})}
+            {do
+               {foreach_int $i 0 3
+                  {if {&& {>= $x {elem {elem $samples $i} 0}} {<= $x {elem {elem $samples {+ $i 1}} 0}}}
+                     {set $left {elem $samples $i}}
+                     {set $right {elem $samples {+ $i 1}}}
+                  }
+               }
+               {do
+                  ($span {- {elem $right 0} {elem $left 0}})
+                  ($t {/ {- $x {elem $left 0}} $span})
+                  ($z0 {elem $left 1}) ($z1 {elem $right 1})
+                  ($m0 {* $span {elem $left 2}}) ($m1 {* $span {elem $right 2}})
+                  ($a {+ {* 2 {- $z0 $z1}} $m0 $m1})
+                  ($b {- {- {* 3 {- $z1 $z0}} {* 2 $m0}} $m1})
+                  {array
+                     ({+ {* {+ {* {+ {* $a $t} $b} $t} $m0} $t} $z0}
+                      {/ {+ {* {+ {* {* 3 $a} $t} {* 2 $b}} $t} $m0} $span})
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+
+{func dx_drum_lane_surface_basis ($slope)
+   {do
+      ($c {/ 1.0 {sqrt {+ 1.0 {* $slope $slope}}}})
+      ($s {* $slope $c})
+      {array ($c 0 $s 0 1 0 {- 0 $s} 0 $c)}
+   }
+}
+
+{func dx_drum_lane_visual_anchor ($smasher $plate $name $part)
+   {with $smasher
+      {do
+         ($x {* 2.8 {- {dx_drum_lane_position $part} 3}})
+         ($surface {dx_drum_lane_surface_eval {$plate get dx_lane_surface_samples} $x})
+         ($basis {dx_drum_lane_surface_basis {elem $surface 1}})
+         {unless {exists $name} {new Trans $name}}
+         ; Use the same coordinate system as the sampled receivers, including its ancestry.
+         {$name set_trans_parent {{$plate find gem_smasher1} trans_parent}}
+         {$name set_local_pos $x
+            {if_else {find_elem (hihat ride crash) $part} -2.55 0}
+            {+ {elem $surface 0} {if_else {find_elem (hihat ride crash) $part} -0.1 0}}
+         }
+         {$name set_local_rot_mat
+            {elem $basis 0} {elem $basis 1} {elem $basis 2}
+            {elem $basis 3} {elem $basis 4} {elem $basis 5}
+            {elem $basis 6} {elem $basis 7} {elem $basis 8}
+         }
+         {$name set_local_scale {$smasher get_local_scale_index 0} {$smasher get_local_scale_index 1} {$smasher get_local_scale_index 2}}
+         {dx_drum_lane_trace {sprint "surface_" $part "_x_" $x "_z_" {elem $surface 0} "_slope_" {elem $surface 1}}}
+         {object $name}
+      }
+   }
+}
