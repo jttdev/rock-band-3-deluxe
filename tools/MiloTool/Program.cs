@@ -45,7 +45,18 @@ try
         {
             parent = trans.parentObj.value,
             position = new[] { trans.localXfm.m41, trans.localXfm.m42, trans.localXfm.m43 },
-            scale = new[] { trans.localXfm.m11, trans.localXfm.m22, trans.localXfm.m33 },
+            // Row-vector affine transform: three basis rows followed by translation.
+            matrix = new[] {
+                new[] { trans.localXfm.m11, trans.localXfm.m12, trans.localXfm.m13 },
+                new[] { trans.localXfm.m21, trans.localXfm.m22, trans.localXfm.m23 },
+                new[] { trans.localXfm.m31, trans.localXfm.m32, trans.localXfm.m33 },
+                new[] { trans.localXfm.m41, trans.localXfm.m42, trans.localXfm.m43 },
+            },
+            scale = new[] {
+                MathF.Sqrt(trans.localXfm.m11 * trans.localXfm.m11 + trans.localXfm.m12 * trans.localXfm.m12 + trans.localXfm.m13 * trans.localXfm.m13),
+                MathF.Sqrt(trans.localXfm.m21 * trans.localXfm.m21 + trans.localXfm.m22 * trans.localXfm.m22 + trans.localXfm.m23 * trans.localXfm.m23),
+                MathF.Sqrt(trans.localXfm.m31 * trans.localXfm.m31 + trans.localXfm.m32 * trans.localXfm.m32 + trans.localXfm.m33 * trans.localXfm.m33),
+            },
         };
     }
     void Walk(DirectoryMeta dir, string path)

@@ -19,22 +19,26 @@
             {unless {$widget has (dx_lane_base_offsets)}
                {$widget set dx_lane_base_offsets {array ({$widget get x_offset} {$widget get y_offset} {$widget get z_offset})}}
             }
-            {$widget set x_offset {+ {elem {$widget get dx_lane_base_offsets} 0} {- $target_x $base_x}}}
-            {$widget set y_offset {+ {elem {$widget get dx_lane_base_offsets} 1} {- $target_y $base_y}}}
-            {$widget set z_offset {+ {elem {$widget get dx_lane_base_offsets} 2} {- $target_z $base_z}}}
+            {do
+               ($offsets {dx_drum_lane_widget_offsets {$widget get dx_lane_base_offsets} {- $target_x $base_x}})
+               {$widget set x_offset {elem $offsets 0}}
+               {$widget set y_offset {elem $offsets 1}}
+               {$widget set z_offset {elem $offsets 2}}
+            }
          }
       }
    }
 }
 
-{func dx_drum_lane_anchor ($smasher $plate $name $part)
+; Only lateral displacement reaches widgets: Y is chart time, Z is stock geometry.
+{func dx_drum_lane_note_anchor ($smasher $plate $name $part)
    {with $smasher
       {unless {exists $name} {new Trans $name}}
       {$name set_trans_parent $plate}
       {$name set_local_pos
          {* 2.8 {- {dx_drum_lane_position $part} 3}}
-         {if_else {find_elem (hihat ride crash) $part} -2.55 0}
-         {if_else {find_elem (hihat ride crash) $part} -0.1 0}
+         {$smasher get_local_pos_index 1}
+         {$smasher get_local_pos_index 2}
       }
       {$name set_local_rot {$smasher get_local_rot_index 0} {$smasher get_local_rot_index 1} {$smasher get_local_rot_index 2}}
       {$name set_local_scale {$smasher get_local_scale_index 0} {$smasher get_local_scale_index 1} {$smasher get_local_scale_index 2}}
@@ -90,7 +94,7 @@
       {if_else $enabled
          {do
             ($part {elem (none snare high_tom middle_tom floor_tom) $slot})
-            ($anchor {dx_drum_lane_anchor $smasher $plate dx_lane_pad_anchor.trans $part})
+            ($anchor {dx_drum_lane_visual_anchor $smasher $plate dx_lane_pad_anchor.trans $part})
             {gem_smasher.grp set_trans_parent $anchor}
             {gem_smasher.grp set_local_pos 0 0 0}
             {gem_smasher.grp set_local_scale
@@ -98,7 +102,8 @@
                {elem {gem_smasher.grp get dx_lane_original_scale} 1}
                {elem {gem_smasher.grp get dx_lane_original_scale} 2}
             }
-            {dx_drum_lane_place_widgets $track $part $smasher $anchor}
+            {dx_drum_lane_place_widgets $track $part $smasher
+               {dx_drum_lane_note_anchor $smasher $plate dx_lane_pad_note_anchor.trans $part}}
          }
          {do
             {gem_smasher.grp set_trans_parent {gem_smasher.grp get dx_lane_original_parent}}
@@ -130,7 +135,7 @@
          {if $enabled
             {do
                ($part {elem (none none hihat ride crash) $slot})
-               ($anchor {dx_drum_lane_anchor $smasher $plate dx_lane_cymbal_anchor.trans $part})
+               ($anchor {dx_drum_lane_visual_anchor $smasher $plate dx_lane_cymbal_anchor.trans $part})
                ($color {elem (red yellow blue green style) {eval {var {sprint "dx_drum_cymbal_color" $slot}}}})
                ($source {$track find {sprint "dx_lane_cymbal_gem_" $color ".mesh"}})
                {dx_drum_lane_trace {sprint "receiver_" $slot "_cymbal_anchor_ready"}}
@@ -169,7 +174,8 @@
                {dx_lane_cymbal.mesh set_local_pos 0 0 0}
                {dx_lane_cymbal.mesh set_local_rot 0 0 0}
                {dx_lane_cymbal.mesh set_local_scale 1 1 1}
-               {dx_drum_lane_place_widgets $track $part $smasher $anchor}
+               {dx_drum_lane_place_widgets $track $part $smasher
+                  {dx_drum_lane_note_anchor $smasher $plate dx_lane_cymbal_note_anchor.trans $part}}
             }
          }
          {if {exists dx_lane_cymbal.mesh} {dx_lane_cymbal.mesh set_showing $enabled}}
@@ -230,6 +236,7 @@
             {set $plate {$track get smasher_plate}}
             {dx_drum_lane_trace drum_plate_found}
             {if {|| $enabled {$track has (dx_lane_initialized)}}
+               {if $enabled {dx_drum_lane_surface_capture $plate}}
                {foreach_int $slot 1 5
                   {dx_drum_lane_trace {sprint "smasher_" $slot "_lookup"}}
                   {dx_drum_lane_receiver $track $plate {$plate find {sprint "gem_smasher" $slot}} $slot $enabled}

@@ -7,10 +7,13 @@ NVIDIA RTX A4500 Laptop GPU. RPCS3 `0.0.43-20133-53d44aa4`, Sony firmware 4.93.
 
 US Rock Band 3 (`BLUS30463`) is registered from
 `~/Games/Roms/PS3/Rock Band 3 (USA) (En,Fr,De,Es,It)/`.
-Deluxe build `2afbd3e` is installed in RPCS3's virtual HDD and reports APP_VER 01.05.
-Boot from its updated EBOOT and Pro Drums scoring with the EFNOTE kit are
-verified. The user confirms calibration and a full-song playthrough are complete;
-numeric calibration offsets are not recorded in this repository.
+The workstation uses the local PS3 build from the owned
+`jttdev/rock-band-3-deluxe` fork, branch `feature/separate-cymbal-lanes`.
+See [drum lanes](../../docs/drum-lanes.md) for build and runtime verification.
+Calibration and saves are preserved from the commissioned installation; numeric
+calibration offsets are not recorded in this repository.
+Local update backups and hash manifests live under
+`~/.local/state/rock-band-linux/backups/`.
 
 ## Rebuild
 

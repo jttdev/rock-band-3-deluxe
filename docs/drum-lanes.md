@@ -45,6 +45,37 @@ standard graphics table. Separate lanes require independent copies for these
 states as well as normal notes. Hit feedback, fills, rolls, overdrive, practice
 restarts, multiplayer and restoring the standard layout need verification.
 
+## Receiver surface
+
+The four stock receiver transforms describe a shallow curved surface. Their
+local X/Z positions and X-axis slopes are captured once per smasher plate,
+before separate-lane placement. Stock receiver directories retain their original
+transforms; only their visual groups are reparented.
+
+`dx_drum_lane_surface.dta` interpolates these samples with cubic Hermite segments
+and extends the endpoint tangents to the outer lanes. The seven X positions are
+`2.8 * (position - 3)`. Receiver height and tilt follow that position regardless
+of which instrument occupies it. The visual anchors share the stock receivers'
+parent coordinate system. Cymbals add Y = -2.55 and Z = -0.1 to the surface and
+retain 45% opacity; pads retain their half-width mesh scale.
+
+Note placement changes only the widget's lateral X offset. Y follows chart
+time and Z retains stock note geometry; their asset offsets must be preserved.
+The cymbal receiver's -2.55 Y offset must never reach travelling notes: that
+moves them off their horizontal beat lines. Cosmetic target adjustments must
+not enter `TrackWidget` placement/removal offsets or scoring calibration.
+Target reaction animations and particle launchers use the visual
+anchors. Standard mode restores the original visual parents, scales and trigger
+references and hides the custom cymbal targets.
+
+The Milo inspector exposes the complete row-vector affine matrix and axis
+lengths. Matrix diagonal entries alone are not scales when a receiver is tilted.
+The Python geometry tests evaluate the shipped pure DTA functions against stock
+PS3 samples, including continuity, outer extrapolation and frame orthonormality.
+DTA `do` bindings must precede commands; `*` is binary and `-` is unary/binary.
+Live `surface_<part>_x_..._z_..._slope_...` trace entries verify the PS3 runtime
+against the numerical tests.
+
 ## Asset tooling
 
 Run `python3 tools/bootstrap.py --install-dotnet` once, then
@@ -82,33 +113,48 @@ and report its Pro Drums parts and tom timestamps. Bottom cymbal targets reuse
 the regular note geometry with separate materials so their opacity can change
 without dimming scrolling notes. Targets are lowered and use 45% opacity.
 
-Runtime checks on 2026-11-14 verified that moving hi-hat right swaps it with
-snare, the resulting custom order survives a full emulator restart, and gameplay
-uses that order. MIDI test pulses scored 3,180 points without a crash. Switching
-back to standard mode in the same instance restored four full-width targets and
-removed the separate cymbal targets. The EFNOTE preset was then restored.
-Restarting a song also preserved the seven-lane layout. A gameplay capture
-showed hi-hat feedback at the left cymbal target and snare feedback at the next
-pad target. Target opacity was accepted by the user. The current cymbal anchor
-offset is Y = -2.55, Z = -0.1 for all three cymbals. Screenshot measurements put
-their bottom edges at 611, 611 and 610 pixels in the normalized 720p capture.
-The user deferred final visual fine-tuning; alignment is not signed off.
-Individual ride/crash feedback, practice sections and multiplayer still need
-focused verification. The workstation installation remains the known working
-Deluxe build; these checks use the isolated profile.
+The isolated-profile checks on 2026-11-15 cover:
 
-### Paused handoff
+- PS3 build, twelve Python regression tests and `git diff --check`.
+- All seven live surface traces matching the numerical curve (0.0051 tolerance
+  for two-decimal trace formatting), including repeated layout application.
+- EFNOTE targets, simultaneous snare/crash notes on the same horizontal beat
+  line, and individual hi-hat/ride/crash reaction and particle feedback in Olé.
+  MIDI test pulses scored 1,710 points; the ride capture includes Perfect hits.
+- Song restart, plus a saved custom order surviving a full emulator restart:
+  ride, snare, high tom, crash, middle tom, hi-hat, floor tom. Ride takes the
+  outer-left tilt; crash takes the nearly level centre transform.
+- Custom-order practice in ¡Viva la Gloria!, including a practice restart, and
+  standard-mode restoration in the same emulator instance. Standard mode shows
+  four full-width targets and no separate cymbal receivers.
 
-The goal is paused at the user's request. The latest PS3 build passed, the five
-Python regression tests passed, and `git diff --check` passed. The test emulator
-and temporary navigation service were stopped for session close.
+Evidence is under the private test state's `evidence/surface-fix-20261115/`;
+`efnote.png`, `ride-sheet.png`, `crash-sheet.png`, `custom-practice.png`,
+`practice-restart.png` and `standard-restored.png` cover these checks. The test
+profile defaults to EFNOTE; its prior custom order is preserved. Alignment
+acceptance uses the local receiver surface and note/target contact, not equal
+screen bottom-edge heights. Final visual acceptance remains with the user.
+Multiplayer still needs focused verification. The workstation uses the local
+PS3 build from `feature/separate-cymbal-lanes` in the owned
+`jttdev/rock-band-3-deluxe` fork.
 
-Resume by checking the current source and the private test metadata under
+### Test profile
+
+Private test metadata is under
 `~/.local/state/rock-band-linux/lane-tests/20261114T035032.661356Z/test.json`.
-Restart the temporary navigation service before launching that profile. Keep
-the accepted 45% opacity; finish target alignment using annotated screenshots
-and measurements, then verify remaining hit feedback and practice behavior.
-The normal workstation installation has not received this prototype.
+Start the temporary navigation service before launching that profile. The
+external EXT_MICRON drive must be mounted: the profile links its installed game
+assets and song library. Normal-profile updates replace only `PARAM.SFO`,
+`USRDIR/EBOOT.BIN`, `USRDIR/band_s.self` and the two `USRDIR/gen/patch_ps3*`
+files after closing RPCS3. Back up these files first under
+`~/.local/state/rock-band-linux/backups/`; keep saves, `dx_settings.dta`,
+calibration, controller settings and renderer/audio configuration intact.
+
+Intel OpenGL is the verified renderer for this profile. If shader compilation
+requests unsupported NVIDIA extensions after switching GPUs, stop RPCS3 and
+preserve/rename the per-EBOOT `shaders_cache` directories in the private cache
+before letting Intel rebuild them. Keep PPU/SPU caches and normal-profile caches
+intact. NVIDIA OpenGL has produced a black window in this diagnostic profile.
 
 ## Isolated RPCS3 testing
 
