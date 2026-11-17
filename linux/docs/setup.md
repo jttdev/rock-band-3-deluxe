@@ -119,7 +119,29 @@ live game-specific configuration.
 The connected EFNOTE mapping and remaining hardware checks are recorded in
 [EFNOTE commissioning](efnote.md).
 
-## Bluetooth gamepad
+## Local multiplayer guitars
+
+The US Default input profile assigns two wired RedOctane Guitar Hero X-plorers
+(USB `1430:4748`) to Players 3 and 4 using SDL devices
+`RedOctane Guitar Hero X-plorer 1` and `RedOctane Guitar Hero X-plorer 2`.
+Both emulate Rock Band guitars (class 1, VID/PID `12ba:0200`). Player 1 remains
+reserved for MIDI drums and Player 2 for the SN30 navigation pad.
+RPCS3 has verified connections to both guitars, the SN30 and the CME MIDI input.
+The user confirms multiplayer input and play work. Whammy, tilt and reconnect
+behavior have not been individually verified.
+
+Press Start on the SN30 to join drums, then Start on each guitar and choose guitar
+and bass. Green confirms, red goes back, and the strum bar navigates. Back/Select
+is available for overdrive. Keep the USB connections stable during the session;
+the two identical guitars are selected by SDL enumeration order.
+
+When launching the AppImage through a temporary systemd user service, use
+`systemd-run --user --collect --property=ExitType=cgroup ~/.local/bin/rock-band-3`.
+The service must track the emulator's child processes as well as the AppImage
+launcher; the default main-process lifetime can terminate a running emulator
+after its launcher exits.
+
+## Bluetooth gamepad configuration
 
 The paired and trusted `8Bitdo SN30 Pro` uses XInput mode (Linux VID/PID
 `045e:02e0`). The global profile assigns it to Player 1; the US game profile
@@ -141,8 +163,8 @@ report different button layouts.
 
 Shader caching is enabled (`Video → Disable On-Disk Shader Cache: false`). The
 US game's `Miscellaneous → Use native user interface: false` override selects
-RPCS3's desktop dialogs for emulator prompts and shader loading. Fullscreen
-startup remains enabled. The game still uses Vulkan with the multi-threaded
+RPCS3's desktop dialogs for emulator prompts and shader loading. Automatic fullscreen
+startup is disabled for the current workstation baseline. The game still uses Vulkan with the multi-threaded
 async recompiler and retains its existing shader and CPU/SPU caches.
 
 On this NVIDIA 595.99.02 / KDE XWayland setup, the renderer-drawn shader-loading
@@ -159,3 +181,16 @@ standard desktop dialogs, including a launch on the external HDMI display at
 The debugger backtrace, startup logs and external-display title screenshot are
 under `installation-logs/` on the external drive. The normal launcher uses the
 game-specific overrides automatically.
+
+## Startup verification
+
+The current baseline starts windowed. A fullscreen launch stalled after the
+first disclaimer while continuing to report frames; a windowed retry reached
+the title screen and the user confirmed play. The cause remains unconfirmed;
+this is a workaround, not proof of a fullscreen defect. Logs and diagnostic
+captures remain under `~/.local/state/rock-band-linux/`.
+
+Custom cymbal lanes are a separate Deluxe setting: before a song, select
+Start → Options → Deluxe Settings → Drum Lanes → Separate: EFNOTE kit,
+back out to save, and choose Pro Drums. The setting applies to the next song.
+See the combined project's `docs/drum-lanes.md` for layout and verification details.

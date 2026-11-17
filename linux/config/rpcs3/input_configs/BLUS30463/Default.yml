@@ -33,3 +33,79 @@ Player 2 Input:
     Down: Down
     Left: Left
     Right: Right
+Player 3 Input:
+  Handler: SDL
+  Device: RedOctane Guitar Hero X-plorer 1
+  Config:
+    Device Class Type: 1
+    Vendor ID: 4794
+    Product ID: 512
+    Left Stick Left: ''
+    Left Stick Right: ''
+    Left Stick Up: ''
+    Left Stick Down: ''
+    Right Stick Up: ''
+    Right Stick Down: ''
+    L2: ''
+    R2: ''
+    L3: ''
+    R3: ''
+    Right Stick Left: RS X-
+    Right Stick Right: RS X+
+    Square: West
+    Cross: South
+    Circle: East
+    Triangle: North
+    L1: LB
+    R1: RS Y+
+    Start: Start
+    Select: Back
+    PS Button: Guide
+    Up: Up
+    Down: Down
+    Left: Left
+    Right: Right
+    Left Stick Deadzone: 0
+    Right Stick Deadzone: 0
+    Left Pad Squircling Factor: 0
+    Right Pad Squircling Factor: 0
+    Enable Large Motor: false
+    Enable Small Motor: false
+Player 4 Input:
+  Handler: SDL
+  Device: RedOctane Guitar Hero X-plorer 2
+  Config:
+    Device Class Type: 1
+    Vendor ID: 4794
+    Product ID: 512
+    Left Stick Left: ''
+    Left Stick Right: ''
+    Left Stick Up: ''
+    Left Stick Down: ''
+    Right Stick Up: ''
+    Right Stick Down: ''
+    L2: ''
+    R2: ''
+    L3: ''
+    R3: ''
+    Right Stick Left: RS X-
+    Right Stick Right: RS X+
+    Square: West
+    Cross: South
+    Circle: East
+    Triangle: North
+    L1: LB
+    R1: RS Y+
+    Start: Start
+    Select: Back
+    PS Button: Guide
+    Up: Up
+    Down: Down
+    Left: Left
+    Right: Right
+    Left Stick Deadzone: 0
+    Right Stick Deadzone: 0
+    Left Pad Squircling Factor: 0
+    Right Pad Squircling Factor: 0
+    Enable Large Motor: false
+    Enable Small Motor: false

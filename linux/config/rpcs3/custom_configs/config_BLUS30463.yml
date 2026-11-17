@@ -3,7 +3,7 @@ Video:
   Shader Mode: Async Recompiler (multi-threaded)
   Disable On-Disk Shader Cache: false
 Miscellaneous:
-  Start games in fullscreen mode: true
+  Start games in fullscreen mode: false
   Use native user interface: false
 Input/Output:
   Emulated Midi devices: DrumsßßßC2MIDI Pro:C2MIDI Pro MIDI 1 24:0@@@Keyboardßßß@@@Keyboardßßß@@@

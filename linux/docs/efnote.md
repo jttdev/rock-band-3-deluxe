@@ -66,9 +66,11 @@ and assigns the SN30 Pro to Player 2. The local Deluxe settings file uses
 `dx_nav_controller_port = 1` (zero-based Player 2). The global RPCS3 input profile
 still assigns the SN30 Pro to Player 1 for other games.
 
-The game launcher sets `SDL_JOYSTICK_LINUX_CLASSIC=1`. This single-gamepad setup
-uses `/dev/input/js0` rather than an `eventN` path that changes as USB/Bluetooth
-devices reconnect. RPCS3's SDL backend matches both name and path when reattaching
+The game launcher sets `SDL_JOYSTICK_LINUX_CLASSIC=1`. The classic joystick
+endpoint avoids an `eventN` path that changes as USB/Bluetooth
+devices reconnect. With both guitars connected first, they occupy `js0`/`js1`
+and the SN30 occupies `js2`; RPCS3 selects the SN30 by its SDL name.
+RPCS3's SDL backend matches both name and path when reattaching
 an existing controller. The current custom SDL database entry supplies the
 mapping for the classic endpoint in XInput mode, including Start and Select.
 

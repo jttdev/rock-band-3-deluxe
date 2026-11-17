@@ -134,7 +134,12 @@ Evidence is under the private test state's `evidence/surface-fix-20261115/`;
 profile defaults to EFNOTE; its prior custom order is preserved. Alignment
 acceptance uses the local receiver surface and note/target contact, not equal
 screen bottom-edge heights. Final visual acceptance remains with the user.
-Multiplayer still needs focused verification. The workstation uses the local
+The user confirms general multiplayer input/play with MIDI drums and two wired
+X-plorer guitars. The saved lane setting was Standard when inspected; selecting
+Separate: EFNOTE kit enables the custom layout for the next song. Independent
+track geometry, feedback and standard-mode restoration in multiplayer still
+need focused verification. Controller setup is in `linux/docs/setup.md`.
+The workstation uses the local
 PS3 build from the owned `jttdev/rock-band-3-deluxe` fork.
 The installed source commit and file hashes are recorded in its local backup
 manifest.

@@ -9,8 +9,9 @@ guitar, bass, vocals, keys, and local multiplayer through RPCS3.
 The connected electronic kit is reported as an EFNOTE 3B, using a CME C2MIDI Pro
 DIN-to-USB interface. Its pad mapping is measured from live MIDI events.
 Audio uses the MOTU M4. The Bluetooth 8Bitdo SN30 Pro uses XInput mode and serves
-as the drum player's navigation pad, with a separate keyboard drum fallback. Other instruments are
-not configured.
+as the drum player's navigation pad, with a separate keyboard drum fallback.
+Two wired Xbox 360 X-plorer guitars are configured on Players 3 and 4;
+the user confirms multiplayer input and play work.
 
 Private repository: <https://github.com/jttdev/rock-band-linux>.
 
@@ -71,6 +72,6 @@ in RPCS3, or launch with `--input-config "Keyboard Drums"`.
 See [setup](docs/setup.md), [EFNOTE commissioning](docs/efnote.md) and
 [projector](docs/projector.md).
 The user confirms calibration and a full-song playthrough are complete. Reconnect
-and advanced input checks remain listed in the commissioning notes. Guitar/bass controllers, microphones,
-keys, and simultaneous multiplayer will each need their own hardware checks and
-documented profiles as they are added.
+and advanced input checks remain listed in the commissioning notes. Guitar
+whammy, tilt and reconnect checks remain pending. Microphones and keys
+will need hardware checks and profiles as they are added.
