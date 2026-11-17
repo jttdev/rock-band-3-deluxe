@@ -8,7 +8,8 @@ uncommissioned alternative.
 
 - Module MIDI OUT → CME C2MIDI Pro → laptop USB.
 - RPCS3 I/O emulates a MIDI Pro Adapter of type **Drums**.
-- Current RtMidi input: `C2MIDI Pro:C2MIDI Pro MIDI 1 24:0`.
+- RtMidi input: `C2MIDI Pro:C2MIDI Pro MIDI 1 28:0` on this workstation;
+  the numeric ALSA address depends on device connection order.
 - Module **Settings → MIDI Ch: 10**, so all pads transmit on channel 10.
 - Audio: RPCS3 → MOTU M4 stereo at 48 kHz.
 - Menu controller: Bluetooth SN30 Pro in XInput mode, standard gamepad profile
@@ -79,7 +80,9 @@ L=4, R=5, Select=6, Start=7 and left-stick click=8. Right-stick click uses the
 remaining digital button 9; that individual click has not been isolated in the
 capture. Stick axes are 0/1 and 3/4; trigger axes are 2/5. D-pad uses hat 0.
 
-Deluxe's navigation pad controls an already joined drummer. The launcher starts
+Deluxe's navigation pad controls the local session leader. Join drums before
+either guitar so the SN30 navigates the drummer's menus; if bass joins first,
+the navigation pad can control bass instead. The launcher starts
 `scripts/sn30-drum-start.py` to translate the navigation pad's first Start press
 into the MIDI drum Start sequence. It reads this controller only, without
 grabbing it, sends MIDI solely to RPCS3's virtual drum input, and then exits.
