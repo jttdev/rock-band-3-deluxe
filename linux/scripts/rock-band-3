@@ -13,6 +13,8 @@ if [ ! -f "$installed" ]; then
 fi
 # Keep the gamepad path stable when USB event devices are renumbered.
 export SDL_JOYSTICK_LINUX_CLASSIC=1
+# RPCS3's audio library asks PulseAudio for a fixed 25 ms buffer; this replaces it.
+export PULSE_LATENCY_MSEC="${PULSE_LATENCY_MSEC:-12}"
 bridge_python="$HOME/.local/share/rock-band-linux/controller-venv/bin/python"
 bridge_script="$HOME/.local/share/rock-band-linux/sn30-drum-start.py"
 if [ -x "$bridge_python" ] && [ -f "$bridge_script" ]; then

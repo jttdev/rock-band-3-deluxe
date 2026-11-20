@@ -2,6 +2,9 @@ Video:
   Write Color Buffers: true
   Shader Mode: Async Recompiler (multi-threaded)
   Disable On-Disk Shader Cache: false
+  Frame limit: 120
+Audio:
+  Desired Audio Buffer Duration: 22
 Miscellaneous:
   Start games in fullscreen mode: false
   Use native user interface: false
