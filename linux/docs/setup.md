@@ -31,14 +31,12 @@ Local update backups and hash manifests live under
    See <https://rb3dx.milohax.org/install/> for current requirements.
 5. Close RPCS3, apply this repository's configuration, and reopen it. Choose the
    local Vulkan adapter if needed; its hardware-specific name is not tracked.
-6. Install the game launcher and first-Start helper:
+6. Install the game launcher:
 
    ```sh
    install -Dm755 scripts/rock-band-3 ~/.local/bin/rock-band-3
-   install -Dm755 scripts/sn30-drum-start.py ~/.local/share/rock-band-linux/sn30-drum-start.py
    ```
 
-   Rebuild the helper environment as described in [EFNOTE commissioning](efnote.md).
    The launcher uses this workstation's disc path listed above. Set Deluxe's
    Navigation Pad to Player 2 in-game; this save setting is outside git.
 7. Install the PipeWire rule for RPCS3's audio stream and reload pipewire-pulse
@@ -140,8 +138,8 @@ RPCS3 has verified connections to both guitars, the SN30 and the CME MIDI input.
 The user confirms multiplayer input and play work. Whammy, tilt and reconnect
 behavior have not been individually verified.
 
-Press Start on the SN30 to join drums, then Start on each guitar and choose guitar
-and bass. Green confirms, red goes back, and the strum bar navigates. Back/Select
+Hit a tom at the title screen to join drums, then press Start on each guitar and
+choose guitar and bass. Green confirms, red goes back, and the strum bar navigates. Back/Select
 is available for overdrive. Keep the USB connections stable during the session;
 the two identical guitars are selected by SDL enumeration order.
 
@@ -161,9 +159,8 @@ gamepad, with Deluxe Navigation Pad = Player 2. RPCS3 device name is
 
 The game launcher uses `SDL_JOYSTICK_LINUX_CLASSIC=1` and the tracked custom
 `input_configs/gamecontrollerdb.txt`. Its measured mapping gives bottom B=Cross,
-right A=Circle, left Y=Square and top X=Triangle, plus Start and Select. The
-first-Start helper initializes the MIDI drummer. See [EFNOTE commissioning](efnote.md)
-for its lifecycle, installation and remaining verification.
+right A=Circle, left Y=Square and top X=Triangle, plus Start and Select. See
+[EFNOTE commissioning](efnote.md) for the drum and navigation setup.
 
 `Keyboard Drums.yml` preserves the keyboard drum profile. EFNOTE MIDI input is
 configured separately under I/O. Keep the SN30 Pro in XInput mode; its other modes

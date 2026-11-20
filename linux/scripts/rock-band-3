@@ -15,10 +15,4 @@ fi
 export SDL_JOYSTICK_LINUX_CLASSIC=1
 # RPCS3's audio library asks PulseAudio for a fixed 25 ms buffer; this replaces it.
 export PULSE_LATENCY_MSEC="${PULSE_LATENCY_MSEC:-12}"
-bridge_python="$HOME/.local/share/rock-band-linux/controller-venv/bin/python"
-bridge_script="$HOME/.local/share/rock-band-linux/sn30-drum-start.py"
-if [ -x "$bridge_python" ] && [ -f "$bridge_script" ]; then
-    mkdir -p "$HOME/.local/state/rock-band-linux"
-    "$bridge_python" "$bridge_script" --parent-pid "$$" --start-code 311 > "$HOME/.local/state/rock-band-linux/controller-start.log" 2>&1 &
-fi
 exec "$HOME/.local/bin/rpcs3" --no-gui "$game"

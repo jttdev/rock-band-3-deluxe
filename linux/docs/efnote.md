@@ -82,26 +82,12 @@ capture. Stick axes are 0/1 and 3/4; trigger axes are 2/5. D-pad uses hat 0.
 
 Deluxe's navigation pad controls the local session leader. Join drums before
 either guitar so the SN30 navigates the drummer's menus; if bass joins first,
-the navigation pad can control bass instead. The launcher starts
-`scripts/sn30-drum-start.py` to translate the navigation pad's first Start press
-into the MIDI drum Start sequence. It reads this controller only, without
-grabbing it, sends MIDI solely to RPCS3's virtual drum input, and then exits.
-Subsequent buttons use the ordinary Navigation Pad path. Press Start after the
-title screen appears. Its log is
-`~/.local/state/rock-band-linux/controller-start.log`.
+the navigation pad can control bass instead. Hit a tom at the title screen to
+join as the MIDI drummer, then use the SN30 Pro to navigate.
 
-The installed helper is `~/.local/share/rock-band-linux/sn30-drum-start.py`;
-its interpreter is `~/.local/share/rock-band-linux/controller-venv/bin/python`.
-To rebuild the local environment:
-
-```sh
-uv venv --system-site-packages --python /usr/bin/python3 ~/.local/share/rock-band-linux/controller-venv
-uv pip install --python ~/.local/share/rock-band-linux/controller-venv/bin/python python-rtmidi evdev
-```
-
-Copy the helper from this repository to its installed location. The game launcher
-starts it with `--parent-pid "$$" --start-code 311`; Linux reports the measured
-XInput Start button as key code 311. It exits if the launcher/emulator exits.
+`scripts/sn30-drum-start.py` sends the drum Start sequence when Start is pressed
+on the SN30 Pro. The launcher does not start it: the user reports that the game
+crashes when launched with it. The cause has not been investigated.
 
 ## Verification and calibration
 
@@ -109,10 +95,10 @@ Pad heads, tested rims, cymbal surfaces/edges/bells and pedal CC have been measu
 The left crash bell/edge tests stayed on note 49; right crash edge tests stayed on
 57. No separate left-crash bell note was observed.
 The kit was observed scoring hits in Pro Drums during the DLC song "1901".
-The user confirmed that the SN30 Pro's first Start press opens the drum
-player/profile and joins drums only. The unused microphone "Start / Join" prompt
+The unused microphone "Start / Join" prompt
 is an available slot, not a joined vocals player. The user confirms calibration
-and a full-song playthrough are complete. Numeric calibration offsets have not
+and a full-song playthrough are complete, and that calibration was repeated with
+the [low-latency settings](latency.md). Numeric calibration offsets have not
 been supplied; calibration remains in the local game save outside git.
 
 Full menu coverage after joining, fast rolls, simultaneous hits and reconnect

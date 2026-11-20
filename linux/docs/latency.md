@@ -81,9 +81,11 @@ route. Deluxe adjusts audio and video offsets during a song and has a
 
 On 2026-11-20 the stream buffer and cycle figures for both columns were measured
 with PipeWire 1.6.2 on the workstation, using a test client that sends cubeb's
-request to a private PipeWire instance with the tracked rule. RPCS3's log of a
-session with its default settings shows the same 900-frame buffer. Play on the
-M4 with these settings and the new calibration are pending (beads `dev-njrmk`).
+request to a private PipeWire instance with the tracked rule. RPCS3's logs of
+two sessions on the M4 show the same buffers: 900 frames with its default
+settings, 432 frames with the tracked ones. The user confirms play with the
+tracked settings and a recalibration with clearly lower offsets; the offsets
+and a `latency-report` during play (cycle length, xruns) are not recorded.
 
 ## Sources
 

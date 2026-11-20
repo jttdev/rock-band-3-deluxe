@@ -46,7 +46,7 @@ The script does not install RPCS3, firmware, Deluxe, DLC, or the launcher.
 `scripts/rpcs3` is the workstation launcher; install it to `~/.local/bin/rpcs3`
 after placing the official AppImage at `~/.local/opt/rpcs3/RPCS3.AppImage`.
 Install `scripts/rock-band-3` to `~/.local/bin/rock-band-3` for the game-specific
-external-drive check and controller helper; see [setup](docs/setup.md).
+external-drive check and audio setting; see [setup](docs/setup.md).
 
 ## Controller and keyboard fallback
 
@@ -60,7 +60,7 @@ In the measured Bluetooth mode this means **B = Cross, A = Circle,
 Y = Square, X = Triangle**. The measured XInput mapping is in
 `config/rpcs3/input_configs/gamecontrollerdb.txt`. Keep this controller in
 XInput mode with that mapping. The game launcher uses the classic SDL joystick
-endpoint and the first-Start helper described in [EFNOTE commissioning](docs/efnote.md).
+endpoint; drums join by hitting a tom, as described in [EFNOTE commissioning](docs/efnote.md).
 
 To use keyboard drums, select **Keyboard Drums** as the US game's input profile
 in RPCS3, or launch with `--input-config "Keyboard Drums"`.
