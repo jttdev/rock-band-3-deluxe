@@ -35,6 +35,11 @@ controller database are replaced in full.
 Capture only reads the keys and files already tracked here; review the diff before
 committing. This is an explicit snapshot workflow, not a live symlink.
 
+The PipeWire rule in `config/pipewire/` is installed by hand (see
+[setup](docs/setup.md)). Together with the launcher's `PULSE_LATENCY_MSEC` it
+shortens RPCS3's audio path; `scripts/latency-report` prints the result while a
+song plays. Details and tuning: [latency](docs/latency.md).
+
 Use `--config-dir PATH` for a different RPCS3 installation or a disposable test.
 The script does not install RPCS3, firmware, Deluxe, DLC, or the launcher.
 

@@ -46,7 +46,7 @@ the players and the wall, so the band casts no shadows.
   and aspect ratio grey out while Fast Mode is on.
 - Desktop output at the native 1920x1080 so the projector's scaler stays idle.
   A 120 Hz output selects the 8.3 ms mode; this is inferred from the spec and
-  untested with RPCS3, which still renders the game at 60 fps.
+  untested with RPCS3. The game's frame limit is 120 fps ([latency](latency.md)).
 - Audio through a wired analog output, never HDMI audio via the projector, a
   soundbar or Bluetooth.
 - Calibrate audio and video with this display and the final audio route, as
@@ -55,7 +55,8 @@ the players and the wall, so the band casts no shadows.
   overdrive activation and microphone monitoring keep the full latency, which
   is why real display lag matters for drums and vocals.
 - Reported RPCS3 totals are 20-60 ms depending on the audio buffer, the audio
-  output path and the instrument connection.
+  output path and the instrument connection. [Latency](latency.md) has this
+  workstation's audio path stage by stage.
 
 ## Ceiling mount
 

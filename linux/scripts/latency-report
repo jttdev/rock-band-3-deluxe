@@ -1,0 +1,36 @@
+#!/bin/sh
+# Show the audio path RPCS3 is using. Run it while a song is playing.
+log="${RPCS3_LOG:-$HOME/.cache/rpcs3/RPCS3.log}"
+
+section() { printf '\n== %s\n' "$1"; }
+last() { grep -a "$1" "$log" | tail -n 1 | cut -c1-200; }
+
+section "RPCS3 settings at the last boot"
+for key in 'Enable Buffering' 'Desired Audio Buffer Duration' 'Frame limit' 'VSync Mode'; do
+    last "^  $key:"
+done
+
+section "RPCS3 audio backend"
+last 'Cubeb: Using backend'
+last 'Cubeb: Found device'
+# Bytes to milliseconds for 48 kHz stereo float: 8 bytes per frame, 48 frames per ms.
+last 'Output buffer attributes' |
+    sed -n 's/.*tlength \([0-9]*\), prebuf [0-9]*, minreq \([0-9]*\),.*/\1 \2/p' |
+    awk '{ printf "stream buffer %.1f ms, refill step %.1f ms\n", $1 / 384, $2 / 384 }'
+
+section "RPCS3 stream in pipewire-pulse"
+pactl list sink-inputs | awk -v RS= '/application.name = "RPCS3"/' |
+    grep -E 'Sink:|node.latency'
+pactl list short sinks
+
+section "Running PipeWire nodes (QUANT of the sink = frames per cycle, ERR = xruns)"
+pw-top -b -n 2 | awk '/^S +ID/ { out = "" } /^S +ID/ || /^R / { out = out $0 "\n" } END { printf "%s", out }'
+
+section "Forced graph quantum (0 = none; Realphones mode forces 1024)"
+pw-metadata -n settings 0 clock.force-quantum | grep -o "value:'[0-9]*'"
+
+section "MOTU M4 ALSA buffer (frames)"
+cat /proc/asound/M4/pcm0p/sub0/hw_params
+
+section "PipeWire thread scheduling (FF or RR = realtime, TS = normal)"
+ps -eLo cls,rtprio,comm | grep -E 'data-loop|pipewire|wireplumber' | sort | uniq -c

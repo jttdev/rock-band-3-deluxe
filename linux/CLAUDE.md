@@ -8,6 +8,7 @@ EFNOTE drums through a CME C2MIDI Pro are the connected hardware target.
 - `docs/efnote.md`: connected kit, measured MIDI notes and calibration status.
 - `docs/roland.md`: uncommissioned Roland alternative.
 - `docs/projector.md`: display choice, low-lag settings and ceiling-mount geometry.
+- `docs/latency.md`: audio and video delay per stage, the settings that set it, how to check and tune.
 - `config/`: reviewed, portable settings; `scripts/config.py` applies or captures them.
 - Keep game data, firmware, licences, saves, binaries, RPCN credentials and console
   identifiers outside this repo. Never copy the full RPCS3 config tree into git.

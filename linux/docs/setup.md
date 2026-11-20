@@ -41,11 +41,21 @@ Local update backups and hash manifests live under
    Rebuild the helper environment as described in [EFNOTE commissioning](efnote.md).
    The launcher uses this workstation's disc path listed above. Set Deluxe's
    Navigation Pad to Player 2 in-game; this save setting is outside git.
+7. Install the PipeWire rule for RPCS3's audio stream and reload pipewire-pulse
+   (running audio streams restart):
 
-Tracked settings include Vulkan/720p, Cubeb stereo with a 34 ms requested buffer,
-the game's Write Color Buffers and async multi-threaded shader overrides, the SDL SN30 Pro controller profile, a keyboard drum fallback, and the bundled
-`Darker Style by TheMitoSan` theme. The buffer duration is a baseline, not a
-measurement of end-to-end latency. The dark theme avoids white text on the
+   ```sh
+   install -Dm644 config/pipewire/rock-band-rpcs3.conf ~/.config/pipewire/pipewire-pulse.conf.d/rock-band-rpcs3.conf
+   systemctl --user restart pipewire-pulse
+   ```
+
+   Set Deluxe's Vsync to OFF in-game; see [latency](latency.md).
+
+Tracked settings include Vulkan/720p, Cubeb stereo with a 34 ms requested buffer
+as the global baseline, the game's 22 ms buffer, 120 fps frame limit, Write Color
+Buffers and async multi-threaded shader overrides, the SDL SN30 Pro controller profile, a keyboard drum fallback, and the bundled
+`Darker Style by TheMitoSan` theme. [Latency](latency.md) lists what these
+values add up to. The dark theme avoids white text on the
 default stylesheet's white toolbar and game-list backgrounds under KDE dark mode.
 
 The headless package installer on this build reports a teardown error after
